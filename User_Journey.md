@@ -3,47 +3,99 @@
 
 As part of OMT implementation, the application needs two roles to be performed to successfully complete the migration.
 
-## Migration Tool Configuring User
+## Configure and Compile Migration Tool
 
-This role responsibilities includes successful configuring of OMT – (OMS Migration Tool), before starting the real-time migration. The following task to be done to complete the step of OMT configuration:
+In this journey, the migration configuration user configures the Order Migration Tool based on the Source and Target environments. This is a planned one time only activity for a migration.
+
+### Epic 1? Configure Migration Tool for a migration (//TODO: Link to Epic)
+
+1. The user clone’s git project of oms-migration-tool
+2. The user opens the project in Eclipse
+3. The user navigates to the /config/source folder
+	1. The user updates the Source.properties file.
+	1. The user can optionally update the input and output template XML as per their needs. The files are listed below:
+		1. ListOrder.xml
+		1. ListOrderOutputTemplate.xml
+		1. GetOrderDetails.xml
+		1. GetOrderDetailsOutputTemplate.xml
+		1. ListShipment.xml
+		1. ListShipmentOutputTemplate.xml
+		1. GetShipmentDetails.xml
+		1. GetShipmentDetailsOutputTemplate.xml
+
+1. The user can also implement OrderLister, OrderGetter, ShipmentLister, and ShipmentGetter classes by implementing corresponding com.ibm.orderMigrationTool.XXXinterfaces. The com.ibm.orderMigrationTool also has abstract classes to ease the implementation of custom Lister and Getter. The Source.properties provides the ability to specify custom Lister or Getter classes. 
+
+1. The user navigates to the /config/target folder
+	1. The user updates the Target.properties file.
+
+1. The user can add transformation files in the /config/target folder to transform orders and/or shipments from source output XML to target. ~~But if the value of XSLTRequired_For_Order and XSLTRequired_For_shipment flag is set to False, the~~ The migration tool writes the exact order or shipment to target if no transformation files presents. The transformation file names are:
 	
-1.	The user clone’s git project of oms-migration-tool
-2.	The user opens the project in Eclipse
-3.	The user navigates to the /config/source folder
-	a.	The user updates the omtSource.cfg file with customized values.
-	b.	The user can optionally update the input and output template XML as per their needs. The files are listed below:
-		i.	ListOrder.xml
-		ii.	ListOrderOutputTemplate.xml
-		iii.	GetOrderDetails.xml
-		iv.	GetOrderDetailsOutputTemplate.xml
-		v.	ListShipment.xml
-		vi.	ListShipmentOutputTemplate.xml
-		vii.	GetShipmentDetails.xml
-		viii.	GetShipmentDetailsOutputTemplate.xml
-4.	The user can also implement OmtOrderLister, OmtOrderGetter, OmtShipmentLister, and OmtShipmentGetter classes by implementing corresponding com.ibm.omsMigrationTool.XXXinterfaces. The com.ibm.omsMigrationTool also has abstract classes to ease the implementation of custom Lister and Getter.
-5.	The user navigates to the /config/target folder
-	a.	The user updates the omtTarget.cfg with customized values.
-6.	The user will ad transformation files in the /config/target folder to transform order/Shipment from source output XML to target. But if the value of XSLTRequired_For_Order and XSLTRequired_For_shipment flag is set to False, the migration tool writes the exact order and shipment to target. Default Transformation file name:
-	a.	OrderTransformation.xslt
-	b.	ShipmentTransformation.xslt
-7.	The user can also implement OmtOrderWriter and OmtShipmentWriter classes by implementing corresponding com.ibm.omsMigrationTool.XXXinterfaces. The com.ibm.omsMigrationTool also has abstract classes to ease the implementation of custom Writer.
-8.	After configuration, the user uses the build.xml in the project to build target DEPLOY and creates /deploy/OmsMigration.zip file
-9.	The user copies the OmsMigration.zip to the execution server of the migration.
-	a.	The user should have Read/Write/Execute privilege on the server folder
-	b.	The user should have access to JDK.
-10.	The user unzips the OmsMigration.zip and see the following file structure
-	a.	oms-migration
-		i.	oms-migration.sh
-		ii.	oms-migration.bat
-		iii.	oms-migration.jar
-		iv.	config
+	1. OrderTransformation.xslt
+	1. ShipmentTransformation.xslt
 
-## Migration Tool Executor User
+7. The user can also implement OrderWriter and ShipmentWriter classes by implementing corresponding com.ibm.orderMigrationTool.XXXinterfaces. The com.ibm.orderMigrationTool also has abstract classes to ease the implementation of custom Writer.
+
+8. After configuration, the user uses the build.xml in the project to build target DEPLOY and creates /deploy/OmsMigration.zip file
+
+9. The user copies the OmsMigration.zip to the execution server of the migration.
+	1. The user should have Read/Write/Execute privilege on the server folder
+	1. The user should have access to JDK.
+10.	The user unzips the OmsMigration.zip and see the following file structure
+	- oms-migration
+		- oms-migration.sh
+		- oms-migration.bat
+		- oms-migration.jar
+		- config
+			- source
+				- all source files
+			- target
+				- all target files
+
+## Execute Migration
+
+### Epic 2? Run migration first time for all closed orders and shipments (//TODO: link to the Epic)
+
+User is running Order Migration Tool first time with the intent to migration all closed orders and shipments from source to target using one migration server and one JVM.
+
+1. The user reviews the ```./config/source/source.properties``` to confirm the start date is before the oldest orders and shipments in source system. 
+1. In this case, the migration configuration user has already configured proper parameters for source and target. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
+	1. Create Derby Network Server if it doesn't exist
+	1. Start Derby Network Server if it is not running
+	1. List and retrieve orders from source system
+	1. Import orders into target system
+	1. List and retrieve shipments from source system
+	1. Import shipments into target system
+	1. Exit the JVM once all orders and shipments are processed (success or fail) by createts
+	1. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+
+### Epic 3? Run migration after initial migration (//TODO: link to Epic)
+
+User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders and shipments from source to target using one migration server and one JVM.
+
+1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
+1. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
+	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
+	1. List and retrieve orders from source system
+	1. Skip successfully imported orders base on Derby DB and import new ones into target system
+	1. List and retrieve shipments from source system
+	1. Skip successfully imported shipments base on Derby DB and import new ones into target system
+	1. Exit the JVM once all orders and shipments are processed (success or fail) by createts
+	1. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+
+### Epic 4? Run migration for only orders after initial migraiton (//TODO: link to Epic)
+
+User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders (only orders) from source to target using one migration server and one JVM.
+
+1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
+1. The user executes the migration with ```./oms-migration.sh order```
+
+
+# TBD Content
 
 This role responsibilities includes successful execution of OMT – (OMS Migration Tool). The following tasks can be performede by the Executor User
-	
+
 1.	The user executes the migration in 1 of 8 options below
-	1.	To initialize and start the migration DB, the user will execute the following command:
+	1.To initialize and start the migration DB, the user will execute the following command:
 			./oms-migration.sh initDB (create Derby Network Server if needed then start Derby Network Server) – This action will start the database and create the tables if its not present.
 	2.	To clear the Migration DB, they user will execute the following command:
 			./oms-migration.sh clearDB – This action will check for DB start and then clear the Database of all the records in both MG_ORDER and MG_SHIPMENT tables.
