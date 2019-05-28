@@ -40,7 +40,7 @@ This role responsibilities includes successful configuring of OMT – (OMS Migra
 
 Migration Tool Executor User
 
-This role responsibilities includes successful execution of OMT – (OMS Migration Tool). The following task to be done to complete the migration process:
+This role responsibilities includes successful execution of OMT – (OMS Migration Tool). The following tasks can be performede by the Executor User
 	1.	The user executes the migration in 1 of 8 options below
 		1.	To initialize and start the migration DB, the user will execute the following command:
 				./oms-migration.sh initDB (create Derby Network Server if needed then start Derby Network Server) – This action will start the database and create the tables if its not present.
