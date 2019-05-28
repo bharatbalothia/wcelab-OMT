@@ -6,6 +6,7 @@ As part of OMT implementation, the application needs two roles to be performed t
 Migration Tool Configuring User
 
 This role responsibilities includes successful configuring of OMT – (OMS Migration Tool), before starting the real-time migration. The following task to be done to complete the step of OMT configuration:
+	
 	1.	The user clone’s git project of oms-migration-tool
 	2.	The user opens the project in Eclipse
 	3.	The user navigates to the /config/source folder
@@ -19,7 +20,6 @@ This role responsibilities includes successful configuring of OMT – (OMS Migra
 			vi.	ListShipmentOutputTemplate.xml
 			vii.	GetShipmentDetails.xml
 			viii.	GetShipmentDetailsOutputTemplate.xml
-
 	4.	The user can also implement OmtOrderLister, OmtOrderGetter, OmtShipmentLister, and OmtShipmentGetter classes by implementing corresponding com.ibm.omsMigrationTool.XXXinterfaces. The com.ibm.omsMigrationTool also has abstract classes to ease the implementation of custom Lister and Getter.
 	5.	The user navigates to the /config/target folder
 		a.	The user updates the omtTarget.cfg with customized values.
@@ -41,6 +41,7 @@ This role responsibilities includes successful configuring of OMT – (OMS Migra
 Migration Tool Executor User
 
 This role responsibilities includes successful execution of OMT – (OMS Migration Tool). The following tasks can be performede by the Executor User
+	
 	1.	The user executes the migration in 1 of 8 options below
 		1.	To initialize and start the migration DB, the user will execute the following command:
 				./oms-migration.sh initDB (create Derby Network Server if needed then start Derby Network Server) – This action will start the database and create the tables if its not present.
@@ -60,7 +61,6 @@ This role responsibilities includes successful execution of OMT – (OMS Migrati
 				./oms-migration.sh InflightShipments (this import inflightShipments)
 		9.	To redo the migration for the records created in Derby DB on a particular date or a range, the user will execute the following command, by specifying the start and enddate:
 				./oms-migration.sh redo  <forStartDate mm/dd/yyyy> <forEndDate mm/dd//yyyy>
-
 	2.	Customizing configuration values:
 		1.	./oms-migration.sh class path has config folder first before config files in oms-migration.jar. The user can put a different config/source/omtSource.cfg file to get in flight orders and shipment during cutover without rebuild a jar.
 		2.	The user will add configuration file in the config folder in the same structure as specified in the Eclipse.
