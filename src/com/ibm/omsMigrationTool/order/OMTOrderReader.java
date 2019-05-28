@@ -59,11 +59,4 @@ public class OMTOrderReader implements OMTConstants{
 		}
 		
 	}
-
-	
-    public static void main(String[] args)
-    {
-
-    }
-
 }
