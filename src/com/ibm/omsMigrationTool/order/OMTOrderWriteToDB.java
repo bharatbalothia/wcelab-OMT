@@ -64,9 +64,4 @@ public class OMTOrderWriteToDB implements OMTConstants{
 
 	}
 
-	//	public static void main(String args[]) throws Exception
-	//	{
-	//		String queueMessage = "<Order OrderHeaderKey='345345' OrderNo='hgdf' Status='Shipped'/>";
-	//		writeToDB(queueMessage);		
-	//	}
 }
