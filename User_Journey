@@ -76,11 +76,11 @@ This role responsibilities includes successful execution of OMT – (OMS Migrati
 			./oms-migration.sh clearDB
 		3.	The user will run the following command to stop the DerbyDB after completing the migration
 			./oms-migration.sh stopDB
-	6.	The user will run the following steps to do a migration of all closedOrders and closedShipments for a specified dateRange:
+	6.	The user will run the following steps to do a migration of all closedOrders and closedShipments for a specified dateRange in source.cfg:
 		1.	./oms-migration.sh initDB
 		2.	./oms-migration.sh orderandshipment
 		3.	./oms-migration.sh stopDB
-	7.	The user will run the following steps to do a migration of inflight Orders and Shipments for specified cutoff date:
+	7.	The user will run the following steps to do a migration of inflight Orders and Shipments for specified cutoff date in source.cfg:
 		1.	./oms-migration.sh initDB
 		2.	./oms-migration.sh InflightOrders
 		3.	./oms-migration.sh InflightShipments
