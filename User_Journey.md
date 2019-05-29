@@ -87,14 +87,24 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders (only orders) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh order```
+2. The user executes the migration with ```./oms-migration.sh order```.This instructs Order Migration Tool to:
+	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
+	2. List and retrieve orders from source system
+	3. Skip successfully imported orders base on Derby DB and import new ones into target system	
+	4. Exit the JVM once all orders are processed (success or fail) by createts
+	5. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
 ### Epic 5? Run migration for only shipments after initial migraiton (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders (only orders) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh shipment```
+2. The user executes the migration with ```./oms-migration.sh shipment```.This instructs Order Migration Tool to:
+	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
+	2. List and retrieve shipments from source system
+	3. Skip successfully imported shipments base on Derby DB and import new ones into target system	
+	4. Exit the JVM once all shipments are processed (success or fail) by createts
+	5. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
 ### Epic 6? Redo all orders and shipments that was loaded into target yesterday or a date-range (//TODO: link to Epic)
 
@@ -102,7 +112,15 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
 2. The user executes the migration with ./oms-migration.sh redo <forStartDate – mm/dd/yyyy> <forEndDate – mm/dd/yyyy>
-		Note:The forStartDate/ forEndDate is the timestamp of record creation in Migration DB.
+(Note:The forStartDate/ forEndDate is the timestamp of record creation in Migration DB. ) This instructs Order Migration Tool to:
+	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
+	2. In Derby BD, Modify All the records in the date range with IS_IMPORT_SUCCESS to false.
+	3. List and retrieve orders from source system
+	3. Skip successfully imported orders base on Derby DB and import new ones into target system
+	4. List and retrieve shipments from source system
+	5. Skip successfully imported shipments base on Derby DB and import new ones into target system	
+	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
+	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
 ### Epic 7 Re-migrate a specific order (//TODO: link to Epic)
 
