@@ -122,7 +122,7 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
 	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
-### Epic 7 Re-migrate a specific order (//TODO: link to Epic)
+### Epic 7 Re-migrate a specific order/SHIPMENT (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific order using one migration server and one JVM.
 
@@ -131,14 +131,6 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 3. The user executes the migration with ./oms-migration.sh order
 (By doing this when the writer process runs, it will pick up the above modified records and redo the migration write process)
 
-### Epic 8 Re-migrate a specific Shipment (//TODO: link to Epic)
-
-User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific shipment using one migration server and one JVM.
-
-1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration.
-2. To redo for a order-date or list of shipments. The user will update the column ‘IS_IMPORT_SUCCESS = false’ for the related records in MG_XXX tables.
-3. The user executes the migration with ./oms-migration.sh shipment
-(By doing this when the writer process runs, it will pick up the above modified records and redo the migration write process)
 
 ### Epic 9 To get the list of failure count and pending list of Orders/Shipments. (//TODO: link to Epic)
 
