@@ -108,52 +108,51 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 
 ### Epic 6? Redo all orders and shipments that was loaded into target yesterday or a date-range (//TODO: link to Epic)
 
-User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate the orders and shipments loaded yesterday using one migration server and one JVM.
+User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate the orders and shipments loaded for a set of orders/shipments using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ./oms-migration.sh redo <forStartDate – mm/dd/yyyy> <forEndDate – mm/dd/yyyy>
-(Note:The forStartDate/ forEndDate is the timestamp of record creation in Migration DB. ) This instructs Order Migration Tool to:
-	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
-	2. In Derby BD, Modify All the records in the date range with IS_IMPORT_SUCCESS to false.
-	3. List and retrieve orders from source system
+2. In Derby BD, Filter the list of Order/Shipment for a target date and modify the records for the set of orders/shipments with IS_IMPORT_SUCCESS to NULL. 
+3. The user executes the migration with  ```./oms-migration.sh redo``` This instructs Order Migration Tool to:
+	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.	
+	2. Retrieve orders from source system
 	3. Skip successfully imported orders base on Derby DB and import new ones into target system
-	4. List and retrieve shipments from source system
+	4. Retrieve shipments from source system
 	5. Skip successfully imported shipments base on Derby DB and import new ones into target system	
 	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
 	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
-### Epic 7 Re-migrate a specific order/SHIPMENT (//TODO: link to Epic)
+### Epic 7 Re-migrate a specific Order/Shipment or a set of Order/Shipment(//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific order using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration.
-2. To redo for a order-date or list of orders. The user will update the column ‘IS_IMPORT_SUCCESS = false’ for the related records in MG_XXX tables.
-3. The user executes the migration with ./oms-migration.sh order
+2. To redo for a order-date or list of orders. The user will update the column ‘IS_IMPORT_SUCCESS = NULL’ for the related records in MG_XXX tables.
+3. The user executes the migration with ./oms-migration.sh order for ORDER and ./oms-migration.sh shipment for SHIPMENT.
 (By doing this when the writer process runs, it will pick up the above modified records and redo the migration write process)
 
 
-### Epic 9 To get the list of failure count and pending list of Orders/Shipments. (//TODO: link to Epic)
+### Epic 8 To get the list of failure count and pending list of Orders/Shipments. (//TODO: link to Epic)
 
 1. To get the failure count and the list of orders/shipments failed, the user will run the following query to get the list.
-	i.	Select * from MG_XXX where IS_IMPORT_FAILURE = true;
+	i.	Select * from MG_XXX where IS_IMPORT_FAILURE != NULL;
 2.To get the pending list of orders/shipments to be processed, the user will run the following query:
-	i.	Select * from MG_XXX where IS_IMPORT_FAILURE = false and IS_IMPORT_SUCCESS = false;
+	i.	Select * from MG_XXX where IS_IMPORT_FAILURE = NULL and IS_IMPORT_SUCCESS = NULL;
 
-### Epic 10? Run migration for only inFlight Orders after initial migraiton (//TODO: link to Epic)
+### Epic 9 Run migration for only inFlight Orders after initial migraiton (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration the inFlight Orders (only orders) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
 2. The user executes the migration with ```./oms-migration.sh inFlightOrders```
 
-### Epic 11? Run migration for only inFlight Shipments after initial migraiton (//TODO: link to Epic)
+### Epic 10 Run migration for only inFlight Shipments after initial migraiton (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration the inFlight Shipments (only shipments) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
 2. The user executes the migration with ```./oms-migration.sh inFlightShipments```
 
-### Epic 12? Monitoring Progress of migration in Derby DB (//TODO: link to Epic)
+### Epic 11 Monitoring Progress of migration in Derby DB (//TODO: link to Epic)
 
 User is running Order Migration Tool one migration server and one JVM.
 
