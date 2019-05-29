@@ -56,7 +56,7 @@ In this journey, the migration configuration user configures the Order Migration
 
 ### Epic 1? Run migration Test mode for closed orders/shipments for a day (//TODO: link to the Epic)
 
-User is running Order Migration Tool first time to test the generated target importOrder input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM.
+User is running Order Migration Tool first time to test the generated target importOrder/importShipment input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM.
 
 1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date.
 2. The user executes the migration with ```./oms-migration.sh testOrder``` for orders and  ```./oms-migration.sh testShipments``` for Shipments. This instructs Order Migration Tool to:
@@ -70,7 +70,7 @@ User is running Order Migration Tool first time to test the generated target imp
 
 ### Epic 2? Run migration Test mode for InFlightOrders/InFlightShipments for a day (//TODO: link to the Epic)
 
-User is running Order Migration Tool first time to test the generated target importOrder input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM.
+User is running Order Migration Tool first time to test the generated target importOrder/importShipment input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM for InflightOrders/InflightShipments.
 
 1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date. 
 1. The user executes the migration with ```./oms-migration.sh testInflightOrders``` for orders and  ```./oms-migration.sh testInflightShipments``` for shipments. This instructs Order Migration Tool to:
@@ -79,20 +79,8 @@ User is running Order Migration Tool first time to test the generated target imp
 	2. List and retrieve orders/shipments from source system
 	3. Export the generated XML for importOrder/importShipments to file system. 
 	4. Exit the JVM. 
-	If the user intent to test the PurchaseOrder XML, then the User can specify the filter with DOCUMENT_TYPE in ListOrder.xml and generate only the importOrder XML for PurchaseOrder, similarly it can be done for all type of Orders.
+	If the user intent to test the PurchaseOrder XML, then the User can specify the filter with DOCUMENT_TYPE in ListOrder.xml and generate only the importOrder XML for PurchaseOrder, similarly it can be done for all type of Orders. It can be repeated for one day or for a date range.
 
-
-### Epic 2? Run migration Test mode for InFlightShipments for a day (//TODO: link to the Epic)
-
-User is running Order Migration Tool first time to test the generated target importOrder input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM.
-
-1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date. 
-1. The user executes the migration with ```./oms-migration.sh testShipments```. This instructs Order Migration Tool to:
-	 
-	1. Start Derby Network Server if it is not running
-	2. List and retrieve orders from source system
-	3. Export the generated XML for importShipments to file system. 
-	4. Exit the JVM.
 ### Epic 3? Run migration first time for all closed orders and shipments (//TODO: link to the Epic)
 
 User is running Order Migration Tool first time with the intent to migration all closed orders and shipments from source to target using one migration server and one JVM.
@@ -163,10 +151,10 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 
 ### Epic 8 Re-migrate a specific Order/Shipment or a set of Order/Shipment(//TODO: link to Epic)
 
-User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific order using one migration server and one JVM.
+User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific order/shipment using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration.
-2. To redo for a order-date or list of orders. The user will update the column ‘IS_IMPORT_SUCCESS = NULL’ for the related records in MG_XXX tables.
+2. To redo for a order/shipment, the user will update the column ‘IS_IMPORT_SUCCESS = NULL’ for the related records in MG_XXX tables.
 3. The user executes the migration with ./oms-migration.sh order for ORDER and ./oms-migration.sh shipment for SHIPMENT.
 (By doing this when the writer process runs, it will pick up the above modified records and redo the migration write process)
 
