@@ -59,8 +59,8 @@ In this journey, the migration configuration user configures the Order Migration
 User is running Order Migration Tool first time to test the generated target importOrder/importShipment input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM.
 
 1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date.
-2. The user executes the migration with ```./oms-migration.sh testOrder``` for orders and  ```./oms-migration.sh testShipments``` for Shipments. This instructs Order Migration Tool to:
-	 
+2. The user executes the migration with ```./oms-migration.sh testOrder``` for orders and  ```./oms-migration.sh testShipment``` for Shipments. This instructs Order Migration Tool to:
+
 	1. Start Derby Network Server if it is not running
 	2. List and retrieve orders/shipments from source system
 	3. Export the importOrder/importShipment XML to the file system. 
@@ -73,7 +73,7 @@ User is running Order Migration Tool first time to test the generated target imp
 User is running Order Migration Tool first time to test the generated target importOrder/importShipment input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM for InflightOrders/InflightShipments.
 
 1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date. 
-1. The user executes the migration with ```./oms-migration.sh testInflightOrders``` for orders and  ```./oms-migration.sh testInflightShipments``` for shipments. This instructs Order Migration Tool to:
+2. The user executes the migration with ```./oms-migration.sh testInflightOrders``` for orders and  ```./oms-migration.sh testInflightShipments``` for shipments. This instructs Order Migration Tool to:
 	 
 	1. Start Derby Network Server if it is not running
 	2. List and retrieve orders/shipments from source system
@@ -86,60 +86,39 @@ User is running Order Migration Tool first time to test the generated target imp
 User is running Order Migration Tool first time with the intent to migration all closed orders and shipments from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source/source.properties``` to confirm the start date is before the oldest orders and shipments in source system. 
-1. In this case, the migration configuration user has already configured proper parameters for source and target. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
-	1. 
-	2. Start Derby Network Server if it is not running
-	3. List and retrieve orders from source system
-	4. Import orders into target system
-	5. List and retrieve shipments from source system
-	6. Import shipments into target system
-	7. Exit the JVM once all orders and shipments are processed (success or fail) by createts
-	8. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+2. In this case, the migration configuration user has already configured proper parameters for source and target. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
+	
+	1. Start Derby Network Server if it is not running
+	2. List and retrieve orders from source system
+	3. Import orders into target system
+	4. List and retrieve shipments from source system
+	5. Import shipments into target system
+	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
+	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
 ### Epic 4? Run migration after initial migration (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders and shipments from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-1. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
-	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
-	2. List and retrieve orders from source system
-	3. Skip successfully imported orders base on Derby DB and import new ones into target system
-	4. List and retrieve shipments from source system
-	5. Skip successfully imported shipments base on Derby DB and import new ones into target system
-	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
-	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+2. The user executes the migration with ```./oms-migration.sh orderandshipment```. This instructs Order Migration Tool to:
+	1. Skip successfully imported orders/shipments base on Derby DB and import new ones into target system.
 
-### Epic 5? Run migration for only orders after initial migraiton (//TODO: link to Epic)
+### Epic 5? Run migration for only orders or only shipments after initial migraiton (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders (only orders) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh order```.This instructs Order Migration Tool to:
-	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
-	2. List and retrieve orders from source system
-	3. Skip successfully imported orders base on Derby DB and import new ones into target system	
-	4. Exit the JVM once all orders are processed (success or fail) by createts
-	5. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+2. The user executes the migration with ```./oms-migration.sh order``` for orders and  ```./oms-migration.sh shipment``` for shipmens.This instructs Order Migration Tool to:
+	1. Skip successfully imported orders / import shipments base on Derby DB and import new ones into target system.	
 
-### Epic 6? Run migration for only shipments after initial migraiton (//TODO: link to Epic)
 
-User is running Order Migration Tool after previous run or runs. User's intent is to migration newly closed orders (only orders) from source to target using one migration server and one JVM.
-
-1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh shipment```.This instructs Order Migration Tool to:
-	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.
-	2. List and retrieve shipments from source system
-	3. Skip successfully imported shipments base on Derby DB and import new ones into target system	
-	4. Exit the JVM once all shipments are processed (success or fail) by createts
-	5. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
-
-### Epic 7? Redo all orders and shipments that was loaded into target yesterday or a date-range (//TODO: link to Epic)
+### Epic 6? Redo all orders and shipments that was loaded into target yesterday or a date-range (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate the orders and shipments loaded for a set of orders/shipments using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. In Derby BD, Filter the list of Order/Shipment for a target date and modify the records for the set of orders/shipments with IS_IMPORT_SUCCESS to NULL. 
+2. In Derby BD, Filter the list of Order/Shipment for a target date and modify the records for the set of orders/shipments with IMPORTED_TS to NULL. 
 3. The user executes the migration with  ```./oms-migration.sh redo``` This instructs Order Migration Tool to:
 	1. Start Derby Network Server if it is not running. The database folder in ```./data/omt``` should already exist.	
 	2. Retrieve orders from source system
@@ -149,7 +128,7 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 	6. Exit the JVM once all orders and shipments are processed (success or fail) by createts
 	7. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
 
-### Epic 8 Re-migrate a specific Order/Shipment or a set of Order/Shipment(//TODO: link to Epic)
+### Epic 7 Re-migrate a specific Order/Shipment or a set of Order/Shipment(//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to re-migrate a specific order/shipment using one migration server and one JVM.
 
@@ -159,34 +138,37 @@ User is running Order Migration Tool after previous run or runs. User's intent i
 (By doing this when the writer process runs, it will pick up the above modified records and redo the migration write process)
 
 
-### Epic 9 To get the list of failure count and pending list of Orders/Shipments. (//TODO: link to Epic)
+### Epic 8 To get the list of failure count and pending list of Orders/Shipments. (//TODO: link to Epic)
 
 1. To get the failure count and the list of orders/shipments failed, the user will run the following query to get the list.
-	i.	Select * from MG_XXX where IS_IMPORT_FAILURE != NULL;
+	i.	Select * from MG_ORDER where IMPORT_FAILURE_TS != NULL; for Orders.
+	ii.	Select * from MG_SHIPMENT where IMPORT_FAILURE_TS != NULL; for Shipments.
 2.To get the pending list of orders/shipments to be processed, the user will run the following query:
-	i.	Select * from MG_XXX where IS_IMPORT_FAILURE = NULL and IS_IMPORT_SUCCESS = NULL;
-
-### Epic 10 Run migration for only inFlight Orders after initial migraiton (//TODO: link to Epic)
+	i.	Select * from MG_ORDER where IMPORT_FAILURE_TS = NULL and IMPORT_TS = NULL; for Orders.
+	ii.	Select * from MG_SHIPMENT where IMPORT_FAILURE_TS = NULL and IMPORT_TS = NULL; for Shipments.
+	
+### Epic 9 Run migration for only inFlight Orders or iFlight Shipments after initial migraiton (//TODO: link to Epic)
 
 User is running Order Migration Tool after previous run or runs. User's intent is to migration the inFlight Orders (only orders) from source to target using one migration server and one JVM.
 
 1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh inFlightOrders```
+2. The user executes the migration with ```./oms-migration.sh inFlightOrders``` for orders and ```./oms-migration.sh inFlightShipments``` for Shipments.
 
-### Epic 11 Run migration for only inFlight Shipments after initial migraiton (//TODO: link to Epic)
 
-User is running Order Migration Tool after previous run or runs. User's intent is to migration the inFlight Shipments (only shipments) from source to target using one migration server and one JVM.
-
-1. The user reviews the ```./config/source``` and ```./config/target``` to confirm parameters are valid to the user's intented migration. 
-2. The user executes the migration with ```./oms-migration.sh inFlightShipments```
-
-### Epic 12 Monitoring Progress of migration in Derby DB (//TODO: link to Epic)
+### Epic 10 Monitoring Progress of migration in Derby DB (//TODO: link to Epic)
 
 User is running Order Migration Tool one migration server and one JVM.
 
 1. The user can connect to the Derby Network Server to monitor the progress of the migration.
 2. The migration tool creates and populates a record during migration in the folder of migration-db and Derby Network Server on the execution server. 
 
+### Epic 11 TroubShooting - Looking for Failure reasons (//TODO: link to Epic)
+
+User is running Order Migration Tool one migration server and one JVM.
+
+1. The user can connect to the Derby Network Server to monitor the progress of the migration.
+2. The user queries for the order/Shipments and look for the value in FAILURE_REASON column. Depending on the FAILURE_REASON, the user will fix the error in Getter/Transformer/Writer.
+3. If the user doesn't find the entry in the DERBY_DB after running the migration tool, then the lister is not getting the data from the source.
 
 # TBD Content
 
