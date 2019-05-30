@@ -169,6 +169,7 @@ User is running Order Migration Tool one migration server and one JVM.
 1. The user can connect to the Derby Network Server to monitor the progress of the migration.
 2. The user queries for the order/Shipments and look for the value in FAILURE_REASON column. Depending on the FAILURE_REASON, the user will fix the error in Getter/Transformer/Writer.
 3. If the user doesn't find the entry in the DERBY_DB after running the migration tool, then the lister is not getting the data from the source.
+r. Further details on error/exception, will be logged to the log file.
 
 # TBD Content
 
