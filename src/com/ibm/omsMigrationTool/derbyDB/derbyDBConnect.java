@@ -57,11 +57,11 @@ public class derbyDBConnect {
 	
 	public static ResultSet executeSelect(Connection dbConnection, String selectQuery)
 	{
-		ResultSet rs;
+		ResultSet rs = null;
 		try
 		{
 			stmt = dbConnection.createStatement();			 
-		    ResultSet rs = stmt.executeQuery(selectQuery);
+		    rs = stmt.executeQuery(selectQuery);
 			stmt.close();
 		}
 		catch (SQLException sqlExcept)
