@@ -17,7 +17,7 @@ import com.ibm.omsMigrationTool.derbyDB.derbyDBConnect;
 
 
 public class OMTOrderWriteToDB implements OMTConstants{
-
+	
 	public void writeToDB(String queueMessage) throws Exception
 	{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -26,16 +26,18 @@ public class OMTOrderWriteToDB implements OMTConstants{
 		saxParser.parse(new InputSource(new StringReader(queueMessage)), orh);
 		List<Order> orderList = orh.getOrderList();
 		String tableInsertValues = "";
-		for(Order orderElem : orderList)
+		for(Order migrateOrderElement : orderList)
 		{   
+			System.out.println(migrateOrderElement.getOrderNo());
+			System.out.println(migrateOrderElement.getOrderHeaderKey());
 			Connection conn = derbyDBConnect.createConnection();
 			String selectWhereCondition = "";
-			if(orderElem != null)
+			if(migrateOrderElement != null)
 			{
-				selectWhereCondition = "ORDER_HEADER_KEY='"+orderElem.getOrderHeaderKey()+"'";
+				selectWhereCondition = "ORDER_HEADER_KEY='"+migrateOrderElement.getOrderHeaderKey()+"'";
 				if(!derbyDBConnect.checkforRecordExistence(conn,MG_ORDER_TABLE_NAME, selectWhereCondition))
 				{				
-					tableInsertValues = constructValuesforTableInsert(orderElem);				
+					tableInsertValues = constructValuesforTableInsert(migrateOrderElement);				
 					derbyDBConnect.insertRecord(conn, MG_ORDER_TABLE_NAME, tableInsertValues);
 
 				}
@@ -63,5 +65,11 @@ public class OMTOrderWriteToDB implements OMTConstants{
 		return tableInsertValues;	
 
 	}
-
+//
+//		public static void main(String args[]) throws Exception
+//		{
+//			
+//			String queueMessage = "<Order OrderHeaderKey='768678' OrderNo='345345' Status='Shipped'/>";
+//			writeToDB(queueMessage);		
+//		}
 }

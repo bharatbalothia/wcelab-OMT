@@ -15,8 +15,8 @@ public class OMTOrderLister implements OMTAbstractLister,OMTConstants{
 	SourceConfigReader src_Cfg;
 	@Override
 	public List<Element> omtgetList(LocalDate retriveRecordsForDate) {
-		// TODO Auto-generated method stub
-		return null;
+		 List<Element> retrivedOrderElementList = null;
+		return retrivedOrderElementList;
 	}
 
 	@Override
