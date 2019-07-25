@@ -6,19 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class derbyDBConnect {
+import org.apache.log4j.Logger;
 
-	private static String dbURL = "jdbc:derby://localhost:1527/OMTB;create=true;user=me;password=mine";
+import com.ibm.omsMigrationTool.common.MigrationConfigReader;
+import com.ibm.omsMigrationTool.common.OMTConstants;
+import com.ibm.omsMigrationTool.order.OMTOrderExecutor;
 
+public class derbyDBConnect implements OMTConstants{
+
+	//private static String dbURL = "jdbc:derby://localhost:1527/OMTB;create=true;user=me;password=mine;";
+	private static String dbURL = null;
 	public static Connection conn = null;
 	public static Statement stmt = null;
-
+	static MigrationConfigReader mig_cfg_reader = new MigrationConfigReader();
+	static Logger log = Logger.getLogger(derbyDBConnect.class);
 	public static Connection createConnection()
 	{
 		try
 		{
 			Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
 			//Get a connection
+			dbURL = "jdbc:derby://"+mig_cfg_reader.getProperty(DERBY_DB_HOST_NAME)+":"+
+					mig_cfg_reader.getProperty(DERBY_DB_PORT)+"/"+mig_cfg_reader.getProperty(DERBY_DB_SCHEMA_NAME)+
+					"user="+mig_cfg_reader.getProperty(DERBY_DB_USER_NAME)+";password="+mig_cfg_reader.getProperty(DERBY_DB_PASSWORD)+";";
+			log.info("Connecting to DB:"+dbURL);
 			conn = DriverManager.getConnection(dbURL); 
 		}
 		catch (Exception except)
@@ -34,35 +45,48 @@ public class derbyDBConnect {
 		{
 			stmt = dbConnection.createStatement();	
 			String insertStatement = "insert into " + tableName + " values (" + commaSepratedValues+")";
-			System.out.println(insertStatement);
+			if(log.isDebugEnabled())
+			{
+				log.debug(insertStatement);
+			}
 			stmt.execute(insertStatement);
 			stmt.close();
 		}
 		catch (SQLException sqlExcept)
 		{
 			sqlExcept.printStackTrace();
+			log.error(sqlExcept);
 		}
 	}
-	
+
 	public static boolean checkforRecordExistence(Connection conn, String tableName, String whereCondition) throws Exception {
-		
+
 		String selectQuery = "select count(*) as RECORDCOUNT from "+tableName+" where "+ whereCondition;
-		ResultSet orderRec = derbyDBConnect.executeSelect(conn, selectQuery);
-		if(orderRec.getInt("RECORDCOUNT") > 0)
-		{
+		ResultSet retrivedResultSet = derbyDBConnect.executeQuery(conn, selectQuery);
+		if(retrivedResultSet.getInt("RECORDCOUNT") > 0)
+		{			
 			return true;
 		}
 		return false;
 	}
+
+	public static ResultSet updateRecord(Connection conn, String tableName, String whereCondition, String columnName,String columnValue) throws Exception {
+
+		String updateQuery = "update "+tableName+" set "+columnName+" = "+columnValue+" where "+ whereCondition;
+		ResultSet updateResultSet = derbyDBConnect.executeQuery(dbConnection, updateQuery);
+		return updateResultSet;
+	}
 	
-	public static ResultSet executeSelect(Connection dbConnection, String selectQuery)
+	public static ResultSet executeQuery(Connection dbConnection, String queryToExecute)
+	
 	{
 		ResultSet rs = null;
 		try
 		{
 			stmt = dbConnection.createStatement();			 
-		    rs = stmt.executeQuery(selectQuery);
+			rs = stmt.executeQuery(queryToExecute);
 			stmt.close();
+			dbConnection.commit();
 		}
 		catch (SQLException sqlExcept)
 		{
@@ -85,5 +109,12 @@ public class derbyDBConnect {
 			sqlExcept.printStackTrace();
 		}
 
+	}
+
+	public static ResultSet getRecordData(Connection conn2, String mgTableName, String selectWhereCondition) {
+		String selectQuery = "select count(*) as RECORDCOUNT from "+mgTableName+" where "+ selectWhereCondition;
+		ResultSet retrivedResultSet = derbyDBConnect.executeQuery(conn, selectQuery);		
+		return retrivedResultSet;
+		
 	}
 }
