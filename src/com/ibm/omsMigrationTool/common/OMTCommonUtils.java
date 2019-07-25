@@ -37,4 +37,12 @@ public final class OMTCommonUtils implements OMTConstants{
 		trans.transform(new DOMSource(inDoc), new StreamResult(sw));
 		return sw.toString();
 	}
+
+	public static Document transformXML(String property, Document getOrderDetailsOp) {
+
+		Document transformedImportIp = null;
+		// TODO logic to transfomXML and send the transformed XML
+		return transformedImportIp;
+		
+	}
 }
