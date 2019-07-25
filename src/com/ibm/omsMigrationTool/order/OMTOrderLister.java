@@ -8,11 +8,11 @@ import org.w3c.dom.Element;
 
 import com.ibm.omsMigrationTool.OMTAbstractLister;
 import com.ibm.omsMigrationTool.common.OMTConstants;
-import com.ibm.omsMigrationTool.common.SourceConfigReader;
+import com.ibm.omsMigrationTool.common.MigrationConfigReader;
 
 public class OMTOrderLister implements OMTAbstractLister,OMTConstants{
 	int listPageSize;
-	SourceConfigReader src_Cfg;
+	MigrationConfigReader src_Cfg;
 	@Override
 	public List<Element> omtgetList(LocalDate retriveRecordsForDate) {
 		 List<Element> retrivedOrderElementList = null;
@@ -22,7 +22,7 @@ public class OMTOrderLister implements OMTAbstractLister,OMTConstants{
 	@Override
 	public void initilaizeConfg() {
 		
-		SourceConfigReader src_Cfg = new SourceConfigReader();
+		MigrationConfigReader src_Cfg = new MigrationConfigReader();
 		
 		listPageSize = Integer.getInteger(src_Cfg.getProperty(LIST_PAGE_SIZE));
 		// TODO Auto-generated method stub

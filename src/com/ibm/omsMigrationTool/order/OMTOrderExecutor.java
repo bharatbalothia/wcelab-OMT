@@ -5,29 +5,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.ibm.omsMigrationTool.OMTAbstractLister;
+import com.ibm.omsMigrationTool.common.MigrationConfigReader;
 import com.ibm.omsMigrationTool.common.OMTConstants;
-import com.ibm.omsMigrationTool.common.SourceConfigReader;
 
 public class OMTOrderExecutor implements OMTConstants{
 	int maxQueueDepthSize = 100;
 	LocalDate importOrderStartDate,importOrderEndDate;
-	SourceConfigReader src_Cfg;	
+	MigrationConfigReader src_Cfg;	
 	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	LinkedBlockingQueue inMemoryQueue = null;
+	static Logger logger = Logger.getLogger(OMTOrderExecutor.class);
+	static String log4jConfigFile = System.getProperty("user.dir")
+			+"/config/log4j.properties";
+
 	public void omtGetListToQueue () throws Exception
 	{
 		Document listInputDocument=null;
 		Document listOutputTemplateDoc=null;
-		SourceConfigReader src_Cfg = new SourceConfigReader();
+		MigrationConfigReader mig_cfg_reader = new MigrationConfigReader();
 
-		maxQueueDepthSize = Integer.getInteger(src_Cfg.getProperty(MAX_QUEUE_DEPTH));
+		maxQueueDepthSize = Integer.getInteger(mig_cfg_reader.getProperty(MAX_QUEUE_DEPTH));
 
 
-		Class instanceOfOrderList = Class.forName(src_Cfg.getProperty(ORDER_LISTER_CLASS)); 
+		Class instanceOfOrderList = Class.forName(mig_cfg_reader.getProperty(ORDER_LISTER_CLASS));
+		
 		OMTAbstractLister orderListerInstance = 
 				(OMTAbstractLister) instanceOfOrderList.newInstance();
 		orderListerInstance.initilaizeConfg();
@@ -36,8 +43,8 @@ public class OMTOrderExecutor implements OMTConstants{
 		 * Get the Import start Date and End Date for Order from Source Configuration.
 		 */
 
-		importOrderStartDate = LocalDate.parse(src_Cfg.getProperty(IMPORT_START_DATE_FOR_ORDERS),dateFormatter);
-		importOrderEndDate = LocalDate.parse(src_Cfg.getProperty(IMPORT_END_DATE_FOR_ORDERS),dateFormatter);
+		importOrderStartDate = LocalDate.parse(mig_cfg_reader.getProperty(IMPORT_START_DATE_FOR_ORDERS),dateFormatter);
+		importOrderEndDate = LocalDate.parse(mig_cfg_reader.getProperty(IMPORT_END_DATE_FOR_ORDERS),dateFormatter);
 
 
 		/*
@@ -59,17 +66,23 @@ public class OMTOrderExecutor implements OMTConstants{
 	public void omtPublishEntity () 
 	{
 		String currentOrder =  inMemoryQueue.poll().toString();
-		OMTOrderWriteToDB omtWrite = new OMTOrderWriteToDB();
-		try {
-			omtWrite.writeToDB(currentOrder);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(currentOrder != null)
+		{
+			OMTOrderWriteToDB omtWrite = new OMTOrderWriteToDB();
+			try {
+				logger.info("write to DB");
+				boolean writeSuccess = omtWrite.writeToDB(currentOrder);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
 	public static void main(String[] args)
 	{
+		PropertyConfigurator.configure(log4jConfigFile);
+		logger.info("my first log 4:");
 
 	}
 
