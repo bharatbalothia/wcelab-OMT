@@ -65,6 +65,7 @@ User is running Order Migration Tool first time to test the generated target imp
 	2. List and retrieve orders/shipments from source system
 	3. Export the importOrder/importShipment XML to the file system. 
 	4. Exit the JVM.
+	5. After completion the user should execute clearDB to remove all the test records from the DB, with ``` ./oms-migration.sh clearDB```.
 	If the user intent to test the PurchaseOrder XML, then the User can specify the filter with DOCUMENT_TYPE in ListOrder.xml and generate only the importOrder XML for PurchaseOrder, similarly it can be done for all type of Orders.
 
 
@@ -79,6 +80,7 @@ User is running Order Migration Tool first time to test the generated target imp
 	2. List and retrieve orders/shipments from source system
 	3. Export the generated XML for importOrder/importShipments to file system. 
 	4. Exit the JVM. 
+	5. After completion the user should execute clearDB to remove all the test records from the DB, with ``` ./oms-migration.sh clearDB```.
 	If the user intent to test the PurchaseOrder XML, then the User can specify the filter with DOCUMENT_TYPE in ListOrder.xml and generate only the importOrder XML for PurchaseOrder, similarly it can be done for all type of Orders. It can be repeated for one day or for a date range.
 
 ### Epic 3? Run migration first time for all closed orders and shipments (//TODO: link to the Epic)
@@ -171,5 +173,29 @@ User is running Order Migration Tool one migration server and one JVM.
 3. If the user doesn't find the entry in the DERBY_DB after running the migration tool, then the lister is not getting the data from the source.
 4. Further details on error/exception, will be logged to the log file.
 
+### Epic 12? Run migration first time for customers (//TODO: link to the Epic)
 
+User is running Order Migration Tool first time with the intent to migration all closed orders and shipments from source to target using one migration server and one JVM.
 
+1. The user reviews the ```./config/source/source.properties``` to confirm the start date is before the oldest orders and shipments in source system. 
+2. In this case, the migration configuration user has already configured proper parameters for source and target. The user executes the migration with ```./oms-migration.sh customer```. This instructs Order Migration Tool to:
+	
+	1. Start Derby Network Server if it is not running
+	2. List and retrieve customers from source system
+	3. Import customers into target system
+	4. Exit the JVM once all customers are processed (success or fail) by createts
+	5. The Derby Network Server will still be running after JVM exist to allow reporting and analysis. The user can stop the Derby Network Server manually. 
+
+### Epic 13? Run migration Test mode for InFlightCustomers (//TODO: link to the Epic)
+
+User is running Order Migration Tool first time to test the generated target importOrder/importShipment input XML, with the intent to use that XML to manually import it to target system using one migration server and one JVM for InflightOrders/InflightShipments.
+
+1. The user reviews the ```./config/source/source.properties``` to confirm the start date and end date. 
+2. The user executes the migration with ```./oms-migration.sh testInflightOrders``` for orders and  ```./oms-migration.sh testInflightShipments``` for shipments. This instructs Order Migration Tool to:
+	 
+	1. Start Derby Network Server if it is not running
+	2. List and retrieve customers from source system
+	3. Export the generated XML for manageCustomer to file system. 
+	4. Exit the JVM. 
+	5. After completion the user should execute clearDB to remove all the test records from the DB, with ``` ./oms-migration.sh clearDB```.
+	If the user intent to test the PurchaseOrder XML, then the User can specify the filter with DOCUMENT_TYPE in ListOrder.xml and generate only the importOrder XML for PurchaseOrder, similarly it can be done for all type of Orders. It can be repeated for one day or for a date range.
