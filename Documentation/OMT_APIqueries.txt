@@ -1,0 +1,85 @@
+API: getOrderList
+	Query:
+	   <Order>
+	   	<ComplexQuery Operator="AND">
+	      <And>
+	          <Exp Name="Createts" QryType="GE" Value="2019-07-20"/>
+	          <Exp Name="Createts" QryType="LT" Value="2019-07-25"/>
+	      </And>
+	    </ComplexQuery>
+	   </Order>
+	
+	Template:
+	
+	<OrderList TotalOrderList="">
+		<Order Createts="" HasDerivedParent="" OrderHeaderKey="" OrderNo="" Status="" />
+	</OrderList>
+
+	Sample Result:
+
+	<OrderList LastOrderHeaderKey="2019072409223062945738" LastRecordSet="Y" ReadFromHistory="" TotalOrderList="71">
+		<Order Createts="2019-07-22T00:54:01-04:00" OrderHeaderKey="2019072200535946480053" OrderNo="110178" Status="Shipped"/>
+		<Order Createts="2019-07-22T02:10:28-04:00" OrderHeaderKey="2019072202102846849062" OrderNo="110180" Status="Cancelled"/>
+		<Order Createts="2019-07-22T02:15:36-04:00" OrderHeaderKey="2019072202153646874519" OrderNo="110182" Status="Scheduled"/>
+		<Order Createts="2019-07-22T02:59:20-04:00" OrderHeaderKey="2019072202592047082069" OrderNo="WMT_ORD_6132_N" Status="Released"/>
+		<Order Createts="2019-07-22T03:19:33-04:00" OrderHeaderKey="2019072203193247180985" OrderNo="WMT_ORD_6133_N" Status="Released"/>
+	</OrderList>
+
+API: getShipmentList
+	Query:
+	   <Shipment>
+	   	<ComplexQuery Operator="AND">
+	      <And>
+	          <Exp Name="Createts" QryType="GE" Value="2019-07-22"/>
+	          <Exp Name="Createts" QryType="LT" Value="2019-07-23"/>
+	      </And>
+	    </ComplexQuery>
+	   </Shipment>
+	
+	Template:
+	
+	<Shipments TotalNumberOfRecords="">
+		<Shipment Createts="" ShipmentKey="" ShipmentNo="" Status=""/>
+	</Shipments>
+
+	Result Example:
+
+	<Shipments TotalNumberOfRecords="5">
+		<Shipment Createts="2019-07-22T03:49:13-04:00" ShipmentKey="2019072203491347325970" ShipmentNo="100003801" Status="1400"/>
+		<Shipment Createts="2019-07-22T04:58:15-04:00" ShipmentKey="2019072204581547654307" ShipmentNo="100003802" Status="1400"/>
+		<Shipment Createts="2019-07-22T07:50:39-04:00" ShipmentKey="2019072207503948486458" ShipmentNo="100003803" Status="1600.01"/>
+		<Shipment Createts="2019-07-22T15:46:25-04:00" ShipmentKey="2019072215462550894675" ShipmentNo="100003805" Status="1400"/>
+		<Shipment Createts="2019-07-22T15:47:30-04:00" ShipmentKey="2019072215473050900248" ShipmentNo="100003806" Status="1400.200"/>
+	</Shipments>
+
+API: getCustomerList
+	Query:
+	   <Customer>
+	   	<ComplexQuery Operator="AND">
+	      <And>
+	          <Exp Name="Createts" QryType="GE" Value="2019-07-22"/>
+	          <Exp Name="Createts" QryType="LT" Value="2019-07-23"/>
+	      </And>
+	    </ComplexQuery>
+	   </Customer>
+	
+	Template:
+	
+	<CustomerList TotalNumberOfRecords="">
+		<Customer Createts="" CustomerID="" CustomerKey=""ShipmentKey="" />
+	</CustomerList>
+
+	Result Example:
+
+	<CustomerList TotalNumberOfRecords="10">
+		<Customer Createts="2019-05-02T02:20:24-04:00" CustomerID="X1542_1" CustomerKey="2019050202202422759527"/>
+		<Customer Createts="2019-05-02T02:23:00-04:00" CustomerID="1234567" CustomerKey="2019050202230022759726"/>
+		<Customer Createts="2019-05-06T14:10:42-04:00" CustomerID="0034193108" CustomerKey="2019050614104223176534"/>
+		<Customer Createts="2019-05-20T08:06:41-04:00" CustomerID="0034193109" CustomerKey="2019052008064124538394"/>
+		<Customer Createts="2019-07-08T16:30:59-04:00" CustomerID="0010087001" CustomerKey="2019070816305935356210"/>
+		<Customer Createts="2019-07-09T05:24:17-04:00" CustomerID="003419310W" CustomerKey="2019070905241735445924"/>
+		<Customer Createts="2019-07-09T07:13:07-04:00" CustomerID="003419310M" CustomerKey="2019070907130735488529"/>
+		<Customer Createts="2019-04-26T08:46:13-04:00" CustomerID="100000040" CustomerKey="2019042608461321838919"/>
+		<Customer Createts="2019-04-26T08:56:45-04:00" CustomerID="100000041" CustomerKey="2019042608564521839175"/>
+		<Customer Createts="2019-04-26T09:08:00-04:00" CustomerID="516906450" CustomerKey="2019042609080021839412"/>
+	</CustomerList>
